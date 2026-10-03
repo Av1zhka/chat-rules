@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>lost souls · Правила</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        /* ===== ОБЩАЯ АНИМАЦИЯ ФОНА (переливание) ===== */
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0b0806;
+            padding: 2rem 1rem;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            overflow-y: auto;
+            position: relative;
+            animation: bgShift 12s ease-in-out infinite alternate;
+        }
+        @keyframes bgShift {
+            0% { background: #0b0806; }
+            30% { background: #1a130a; }
+            60% { background: #0f0b06; }
+            100% { background: #0b0806; }
+        }
+
+        /* ===== УГЛЫ ===== */
+        .corner {
+            position: fixed;
+            width: 50px;
+            height: 50px;
+            border-color: #ffd700;
+            border-style: solid;
+            border-width: 0;
+            pointer-events: none;
+            z-index: 10;
+            opacity: 0.4;
+            animation: cornerPulse 3s ease-in-out infinite alternate;
+        }
+        .corner-tl { top: 20px; left: 20px; border-top-width: 3px; border-left-width: 3px; }
+        .corner-tr { top: 20px; right: 20px; border-top-width: 3px; border-right-width: 3px; }
+        .corner-bl { bottom: 20px; left: 20px; border-bottom-width: 3px; border-left-width: 3px; }
+        .corner-br { bottom: 20px; right: 20px; border-bottom-width: 3px; border-right-width: 3px; }
+        @keyframes cornerPulse {
+            0% { border-color: #ffd700; opacity: 0.2; transform: scale(0.9); }
+            100% { border-color: #ff8c00; opacity: 0.7; transform: scale(1.1); }
+        }
+
+        /* ===== ФОНОВЫЕ КОЛЬЦА И ИСКРЫ ===== */
+        .front-ring {
+            position: fixed;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 215, 0, 0.08);
+            pointer-events: none;
+            z-index: 20;
+            animation: floatRing 20s ease-in-out infinite alternate;
+        }
+        .front-ring:nth-child(1) { width: 400px; height: 400px; top: 10%; left: 5%; animation-duration: 25s; }
+        .front-ring:nth-child(2) { width: 300px; height: 300px; bottom: 5%; right: 10%; animation-duration: 18s; animation-delay: 4s; }
+        .front-ring:nth-child(3) { width: 200px; height: 200px; top: 50%; left: 70%; animation-duration: 22s; animation-delay: 8s; }
+        @keyframes floatRing {
+            0% { transform: translate(0, 0) rotate(0deg) scale(0.9); opacity: 0.1; }
+            100% { transform: translate(-30px, 40px) rotate(180deg) scale(1.4); opacity: 0.3; }
+        }
+
+        .front-sparkle {
+            position: fixed;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.3), transparent 80%);
+            pointer-events: none;
+            z-index: 15;
+            filter: blur(2px);
+            animation: floatSparkle 12s infinite alternate ease-in-out;
+        }
+        .front-sparkle:nth-child(4) { width: 8px; height: 8px; top: 15%; left: 10%; animation-duration: 14s; }
+        .front-sparkle:nth-child(5) { width: 12px; height: 12px; bottom: 20%; right: 5%; animation-duration: 18s; animation-delay: 2s; }
+        .front-sparkle:nth-child(6) { width: 6px; height: 6px; top: 45%; right: 15%; animation-duration: 12s; animation-delay: 4s; }
+        .front-sparkle:nth-child(7) { width: 10px; height: 10px; bottom: 30%; left: 8%; animation-duration: 16s; animation-delay: 1s; }
+        .front-sparkle:nth-child(8) { width: 5px; height: 5px; top: 70%; left: 55%; animation-duration: 20s; animation-delay: 3s; }
+        .front-sparkle:nth-child(9) { width: 9px; height: 9px; top: 25%; left: 80%; animation-duration: 15s; animation-delay: 5s; }
+        @keyframes floatSparkle {
+            0% { transform: translate(0, 0) scale(0.8); opacity: 0.1; }
+            100% { transform: translate(40px, -60px) scale(2.2); opacity: 0.6; }
+        }
+
+        /* ===== КОНТЕЙНЕР ===== */
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: rgba(20, 16, 12, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 56px;
+            padding: 3rem 2.5rem;
+            border: 1px solid rgba(255, 180, 50, 0.12);
+            box-shadow: 0 0 60px rgba(255, 180, 50, 0.03);
+            position: relative;
+            z-index: 5;
+            animation: fadeUp 0.8s ease;
+        }
+        @keyframes fadeUp {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== ОРНАМЕНТ ===== */
+        .ornament {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 0.6rem;
+        }
+        .ornament .line {
+            width: 70px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #ffd700, #ff8c00, transparent);
+            background-size: 200% 100%;
+            border-radius: 10px;
+            animation: lineMove 3s linear infinite;
+        }
+        @keyframes lineMove {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .ornament .diamond {
+            color: #ffd700;
+            font-size: 1.6rem;
+            animation: diamondSpin 4s linear infinite;
+        }
+        @keyframes diamondSpin {
+            0% { transform: rotate(0deg); opacity: 0.3; }
+            50% { transform: rotate(180deg); opacity: 1; }
+            100% { transform: rotate(360deg); opacity: 0.3; }
+        }
+
+        /* ===== ШАПКА ===== */
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .header .badge {
+            display: inline-block;
+            background: rgba(255, 180, 50, 0.08);
+            color: #ffb833;
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            padding: 0.3rem 1.2rem;
+            border-radius: 40px;
+            text-transform: uppercase;
+            border: 1px solid rgba(255, 180, 50, 0.12);
+            margin-bottom: 0.6rem;
+            animation: pulseBadge 2.5s ease-in-out infinite alternate;
+        }
+        @keyframes pulseBadge {
+            0% { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
+        .header h1 {
+            font-weight: 800;
+            font-size: 3.6rem;
+            color: #f5eee0;
+            letter-spacing: 2px;
+            line-height: 1.1;
+        }
+        .header h1 .gold {
+            background: linear-gradient(135deg, #ffd966, #e6a800);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: goldShift 3s ease-in-out infinite alternate;
+            background-size: 200% 200%;
+        }
+        @keyframes goldShift {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+        .header p {
+            color: #b8a088;
+            font-weight: 300;
+            font-size: 1rem;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            margin-top: 0.2rem;
+            opacity: 0.7;
+        }
+
+        .divider {
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, #ffb833, #ff8c00);
+            margin: 1.8rem auto;
+            border-radius: 10px;
+        }
+
+        /* ===== СЕТКА ПРАВИЛ ===== */
+        .rules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .rule-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 24px;
+            padding: 1.5rem 1.8rem;
+            border: 1px solid rgba(255, 180, 50, 0.06);
+            transition: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: cardIn 0.6s ease forwards;
+        }
+        .rule-card:nth-child(1) { animation-delay: 0.1s; }
+        .rule-card:nth-child(2) { animation-delay: 0.18s; }
+        .rule-card:nth-child(3) { animation-delay: 0.26s; }
+        .rule-card:nth-child(4) { animation-delay: 0.34s; }
+        .rule-card:nth-child(5) { animation-delay: 0.42s; }
+        .rule-card:nth-child(6) { animation-delay: 0.50s; }
+
+        @keyframes cardIn {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .rule-card:hover {
+            background: rgba(255, 180, 50, 0.06);
+            border-color: rgba(255, 180, 50, 0.25);
+            transform: translateY(-6px);
+            box-shadow: 0 10px 40px rgba(255, 180, 50, 0.04);
+        }
+
+        .rule-card .number {
+            font-size: 2.2rem;
+            font-weight: 200;
+            color: #ffb833;
+            opacity: 0.3;
+            line-height: 1;
+            margin-bottom: 0.2rem;
+            transition: 0.3s;
+        }
+        .rule-card:hover .number {
+            opacity: 0.8;
+            transform: scale(1.1);
+        }
+
+        .rule-card .title {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #f5eee0;
+            margin-bottom: 0.4rem;
+            letter-spacing: 0.02em;
+        }
+        .rule-card .text {
+            font-weight: 300;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #d0c0b0;
+        }
+        .rule-card .text strong {
+            color: #ffb833;
+            font-weight: 500;
+        }
+        .rule-card .text .highlight {
+            color: #ff8c00;
+            background: rgba(255, 140, 0, 0.08);
+            padding: 0.05rem 0.4rem;
+            border-radius: 4px;
+        }
+
+        /* ===== БЛОК ВЫХОДА (с 3D и анимациями) ===== */
+        .exit-block {
+            margin-top: 2.8rem;
+            padding: 2.2rem 2.5rem;
+            border-radius: 32px;
+            background: rgba(255, 180, 50, 0.05);
+            border: 2px solid rgba(255, 215, 0, 0.15);
+            position: relative;
+            transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            opacity: 0;
+            transform: perspective(800px) rotateX(10deg) translateY(20px);
+            animation: exitEntry 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.7s forwards;
+            transform-style: preserve-3d;
+            perspective: 800px;
+            overflow: visible;
+        }
+
+        @keyframes exitEntry {
+            0% { opacity: 0; transform: perspective(800px) rotateX(10deg) translateY(20px); }
+            100% { opacity: 1; transform: perspective(800px) rotateX(0) translateY(0); }
+        }
+
+        .exit-block:hover {
+            transform: perspective(800px) rotateX(2deg) rotateY(4deg) translateY(-6px) scale(1.02);
+            background: rgba(255, 180, 50, 0.08);
+            box-shadow: 0 20px 60px rgba(255, 215, 0, 0.1);
+            border-color: rgba(255, 215, 0, 0.3);
+        }
+
+        .exit-block::before {
+            content: '';
+            position: absolute;
+            inset: -5px;
+            border-radius: 36px;
+            padding: 4px;
+            background: linear-gradient(135deg, #ffd700, #ff8c00, #ffd700, #ff8c00);
+            background-size: 300% 300%;
+            animation: borderGlow 4s ease-in-out infinite alternate;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            z-index: -1;
+        }
+        @keyframes borderGlow {
+            0% { background-position: 0% 50%; opacity: 0.3; }
+            100% { background-position: 100% 50%; opacity: 0.9; }
+        }
+
+        .exit-block .deco-star {
+            position: absolute;
+            color: #ffd700;
+            font-size: 0.8rem;
+            opacity: 0.5;
+            animation: starFloat 6s ease-in-out infinite alternate;
+            pointer-events: none;
+        }
+        .exit-block .deco-star:nth-child(1) { top: -10px; left: -10px; animation-delay: 0s; }
+        .exit-block .deco-star:nth-child(2) { top: -15px; right: -5px; animation-delay: 2s; }
+        .exit-block .deco-star:nth-child(3) { bottom: -10px; left: 20%; animation-delay: 4s; }
+        .exit-block .deco-star:nth-child(4) { bottom: 5px; right: -10px; animation-delay: 1s; }
+
+        @keyframes starFloat {
+            0% { transform: translate(0, 0) scale(0.8); opacity: 0.2; }
+            100% { transform: translate(15px, -25px) scale(1.4); opacity: 0.8; }
+        }
+
+        .exit-block .exit-title {
+            font-weight: 700;
+            font-size: 1.7rem;
+            color: #ffd700;
+            text-align: center;
+            margin-bottom: 1rem;
+            letter-spacing: 3px;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.15);
+            animation: titlePulse 3s ease-in-out infinite alternate;
+        }
+        @keyframes titlePulse {
+            0% { text-shadow: 0 0 20px rgba(255, 215, 0, 0.1); }
+            100% { text-shadow: 0 0 50px rgba(255, 215, 0, 0.3); }
+        }
+
+        .exit-block .exit-text {
+            font-weight: 300;
+            font-size: 1.05rem;
+            line-height: 2;
+            color: #e0d0b8;
+            text-align: center;
+        }
+        .exit-block .exit-text strong {
+            color: #ffb833;
+            font-weight: 400;
+        }
+
+        .exit-block .exit-example {
+            margin-top: 1.2rem;
+            padding: 1rem 1.8rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            border-left: 4px solid #ffd700;
+            font-style: italic;
+            color: #f5eee0;
+            font-weight: 300;
+            text-align: center;
+            transition: 0.3s;
+        }
+        .exit-block .exit-example:hover {
+            background: rgba(255, 215, 0, 0.05);
+            border-left-color: #ff8c00;
+            transform: translateX(8px);
+        }
+        .exit-block .exit-example .label {
+            color: #ffd700;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        /* ===== ФУТЕР ===== */
+        .footer {
+            text-align: center;
+            margin-top: 2.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 180, 50, 0.06);
+            font-size: 0.7rem;
+            letter-spacing: 4px;
+            color: #6a5a4a;
+            text-transform: uppercase;
+        }
+        .footer span {
+            color: #a08870;
+            font-weight: 300;
+        }
+
+        /* ===== АДАПТИВ ===== */
+        @media (max-width: 640px) {
+            body { padding: 1rem; }
+            .corner { width: 30px; height: 30px; }
+            .corner-tl { top: 10px; left: 10px; }
+            .corner-tr { top: 10px; right: 10px; }
+            .corner-bl { bottom: 10px; left: 10px; }
+            .corner-br { bottom: 10px; right: 10px; }
+            .container { padding: 2rem 1.2rem; border-radius: 36px; }
+            .header h1 { font-size: 2.4rem; }
+            .rules-grid { grid-template-columns: 1fr; gap: 1rem; }
+            .rule-card { padding: 1.2rem; }
+            .rule-card .number { font-size: 1.8rem; }
+            .ornament .line { width: 40px; }
+            .front-ring { display: none; }
+            .exit-block { padding: 1.5rem; }
+            .exit-block .exit-title { font-size: 1.3rem; }
+            .exit-block .exit-text { font-size: 0.95rem; }
+            .exit-block .deco-star { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- УГЛЫ -->
+    <div class="corner corner-tl"></div>
+    <div class="corner corner-tr"></div>
+    <div class="corner corner-bl"></div>
+    <div class="corner corner-br"></div>
+
+    <!-- КОЛЬЦА И ИСКРЫ -->
+    <div class="front-ring"></div>
+    <div class="front-ring"></div>
+    <div class="front-ring"></div>
+    <div class="front-sparkle"></div>
+    <div class="front-sparkle"></div>
+    <div class="front-sparkle"></div>
+    <div class="front-sparkle"></div>
+    <div class="front-sparkle"></div>
+    <div class="front-sparkle"></div>
+
+    <div class="container">
+        <div class="ornament">
+            <span class="line"></span>
+            <span class="diamond">✦</span>
+            <span class="line"></span>
+        </div>
+
+        <div class="header">
+            <div class="badge">✦ свод правил</div>
+            <h1>lost <span class="gold">souls</span></h1>
+            <p>13+ · соблюдай порядок</p>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="rules-grid">
+            <div class="rule-card">
+                <div class="number">01</div>
+                <div class="title">Возврат после бана</div>
+                <div class="text"><strong>После бана вернуться вы не сможете.</strong> Решение окончательное и обжалованию не подлежит.</div>
+            </div>
+            <div class="rule-card">
+                <div class="number">02</div>
+                <div class="title">Ссоры и оскорбления</div>
+                <div class="text">Ссоры и оскорбления без согласия или грубые обращения — <strong>запрещены</strong>. При ссоре мы ищем того, кто именно начал, и выдаём <span class="highlight">варн</span>.</div>
+            </div>
+            <div class="rule-card">
+                <div class="number">03</div>
+                <div class="title">Агрессия и буллинг</div>
+                <div class="text">Явная агрессия в сторону участника — <strong>запрещена</strong>. Выдаётся <span class="highlight">варн</span>. <em>Владелец не делит всех на любимчиков, олдов и т.д. (только в шуточном формате). Во флуде все равны.</em></div>
+            </div>
+            <div class="rule-card">
+                <div class="number">04</div>
+                <div class="title">Запрещённые темы и контент</div>
+                <div class="text">Обсуждение плохих тем (каннибализм, 18+ и т.д.) на полном серьёзе, <strong>18+ фотографии</strong>, слив чьей-то личной информации без согласия — <span class="highlight">варн</span> или <strong>бан</strong>.</div>
+            </div>
+            <div class="rule-card">
+                <div class="number">05</div>
+                <div class="title">Спам</div>
+                <div class="text">За спам (5+ одинаковых сообщений, стикеров, гифок и т.д.) — <span class="highlight">варн</span>.</div>
+            </div>
+            <div class="rule-card">
+                <div class="number">06</div>
+                <div class="title">Общее правило</div>
+                <div class="text">Относитесь друг к другу с уважением. <strong>Администрация всегда на вашей стороне</strong>, если вы соблюдаете правила.</div>
+            </div>
+            <div class="rule-card">
+                <div class="number">07</div>
+                <div class="title">Интерактивы</div>
+                <div class="text">При не выполнение интерактива в назначеное время, без уважительной причины выдаётся <span class="highlight">варн</span>.</div>
+            </div>
+
+        </div>
+
+        <!-- БЛОК ВЫХОДА С ИСПРАВЛЕННЫМ ИМЕНЕМ "Хена" -->
+        <div class="exit-block">
+            <span class="deco-star">✦</span>
+            <span class="deco-star">✦</span>
+            <span class="deco-star">✦</span>
+            <span class="deco-star">✦</span>
+
+            <div class="exit-title">Порядок выхода из флуда</div>
+            <div class="exit-text">
+                <strong>1.</strong> Упомянуть владельца флуда или совладельца.<br />
+                <strong>2.</strong> Указать причину (по желанию, можно в лс).
+            </div>
+            <div class="exit-example">
+                <span class="label">Пример:</span><br />
+                Роль: Хена<br />
+                Причина: отсутствие свободного времени.
+            </div>
+        </div>
+
+        <div class="footer">
+            <span>lost souls</span>
+        </div>
+    </div>
+
+</body>
+    </html>
